@@ -9,6 +9,55 @@ const generateBoard = (size) => {
     return newBoard
 }
 
+const rowToColumns = (board) => {
+    const newBoard = []
+    let col = 0
+    while (col < board.length) {
+        const newRow = []
+        for (let row = 0; row < board.length; row++) {
+            newRow.push(board[row][col])
+        }
+        col++
+        newBoard.push(newRow)
+    }
+    return newBoard
+}
+
+const diagnolToRow = (board) => {
+    const newBoard = [[], []]
+    let increment = 0
+    let decrement = board.length - 1
+    while(increment < board.length) {
+        newBoard[0].push(board[increment][increment])
+        newBoard[1].push(board[increment][decrement])
+        increment ++
+        decrement --
+    }
+    return newBoard
+}
+
+const checkHorizontal = (board) => {
+    for (let row of board) {
+        const rowSet = new Set(row)
+        console.log(rowSet);
+        if (rowSet.size == 1 && !rowSet.has(undefined)) {
+            return true
+        }
+    }
+}
+
+const checkForWin = (board) => {
+    if (checkHorizontal(board)) {
+        return true
+    }
+    if (checkHorizontal(rowToColumns(board))) {
+        return true
+    }
+    if (checkHorizontal(diagnolToRow(board))) {
+        return true
+    }
+}
+
 const TicTacToe = () => {
 
     const [board, setBoard] = useState(generateBoard(3))
@@ -17,6 +66,13 @@ const TicTacToe = () => {
     const handleClick = (row, coll) => {
         board[row][coll] = currPlayer
         setBoard([...board])
+        if (checkForWin(board)) {
+            console.log(currPlayer + "wins")
+            setBoard(generateBoard(3))
+            setCurrPlayer('x')
+        } else {
+            setCurrPlayer(currPlayer === 'x' ? 'y' : 'x')
+        }
         setCurrPlayer(currPlayer === 'x' ? 'y' : 'x')
     }
 
