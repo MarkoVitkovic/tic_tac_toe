@@ -1,6 +1,8 @@
+import TicTacToe from "./TicTacToe"
+
 const App = () => {
   return (
-    <div>App</div>
+    <TicTacToe />
   )
 }
 
